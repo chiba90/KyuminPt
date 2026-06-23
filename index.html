@@ -9,15 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Chosen Palette: Navy Blue Accent (#1E3A8A), Slate Grays for borders/backgrounds, White for cards. Minimalist and professional. -->
-    <!-- Application Structure Plan: A single-page interactive dashboard designed for CFOs and Executives. It starts with the core "Triple Win" concept, moves into a dynamic "Financial Impact Simulator" where users can adjust variables (dormant points, commission rates) to instantly see the effects on PL, BS, and Tax benefits, and concludes with the Before/After financial table and risk-sharing promise. This structure turns static presentation numbers into a personalized financial discovery tool, maximizing persuasion. -->
-    <!-- Visualization & Content Choices: 
-         1. 4 Big KPI Cards (Inform): Instantly show PL Profit, BS Reduction, Tax Benefit, and Net Cash Out. JS updates these based on sliders.
-         2. Grouped Bar Chart (Compare): Visualizes the Before/After of the Balance Sheet (Cash, Liabilities, Net Assets). Chart.js used.
-         3. Waterfall/Breakdown Bar Chart (Explain): Shows how the Provision Liability turns into Gift Cost, Commission, and final PL Profit. Chart.js used.
-         4. Dynamic Table (Organize): The exact accounting entry changes, updated reactively via JS.
-         All visualizations use Canvas/Chart.js and HTML/Tailwind. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Poppins:wght@500;700&display=swap');
         
@@ -93,7 +84,7 @@
         /* 改行調整用の実用的なクラス */
         .keep-sentence {
             display: inline-block;
-            word-break: keep-all;
+            word-break: normal;
             overflow-wrap: break-word;
         }
     </style>
@@ -119,16 +110,16 @@
         </div>
     </nav>
 
-    <header class="bg-blue-900 text-white py-20">
+    <header class="bg-blue-900 text-white py-20 border-b border-blue-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
             <h1 class="text-3xl md:text-5xl font-bold mb-6 leading-tight tracking-wider">
-                <span class="keep-sentence">「休眠ポイント」のデジタルギフト化による</span><br>
+                <span class="keep-sentence">「休眠ポイント」の</span><span class="keep-sentence">デジタルギフト化による</span><br>
                 <span class="text-blue-300 keep-sentence">財務改善・税務メリット創出のご提案</span>
             </h1>
             <p class="text-base md:text-lg text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed tracking-wide">
-                <span class="keep-sentence">眠っていたポイント負債を</span><span class="keep-sentence">使い勝手の良いデジタルギフトへ置き換え、</span><br class="hidden md:inline">
-                <span class="keep-sentence">キャッシュアウトを最小限に抑えながら</span><span class="keep-sentence">今期の「確実なPL利益」と</span><span class="keep-sentence">「最大級の節税効果」を獲得する、</span><br class="hidden md:inline">
-                <span class="keep-sentence">株式会社デジタルプラスの新しい財務健全化スキーム。</span>
+                <span class="keep-sentence">眠っていたポイント負債を</span><span class="keep-sentence">使い勝手の良い</span><span class="keep-sentence">デジタルギフトへ置き換え、</span><br class="hidden md:inline">
+                <span class="keep-sentence">キャッシュアウトを</span><span class="keep-sentence">最小限に抑えながら</span><span class="keep-sentence">今期の「確実なPL利益」と</span><span class="keep-sentence">「最大級の節税効果」を獲得する、</span><br class="hidden md:inline">
+                <span class="keep-sentence">株式会社デジタルプラスの</span><span class="keep-sentence">新しい財務健全化スキーム。</span>
             </p>
         </div>
     </header>
@@ -139,8 +130,8 @@
             <div class="mb-8">
                 <h2 class="text-2xl font-bold text-blue-900 border-l-4 border-blue-900 pl-3">見えないボトルネックと「大義名分」を伴う解決策</h2>
                 <p class="mt-4 text-slate-600 leading-relaxed text-sm md:text-base">
-                    <span class="keep-sentence">長年滞留する休眠ポイントは、</span><span class="keep-sentence">BSを圧迫し損金否認による税務上の非効率を生んでいます。</span><span class="keep-sentence">本スキームは、</span><span class="keep-sentence">一方的な消滅によるレピュテーションリスクを回避し、</span><br class="hidden md:inline">
-                    <span class="keep-sentence">「デジタルギフトへの移行選択肢」という</span><span class="keep-sentence">誠実な顧客対応プロセスを大義名分とすることで、</span><span class="keep-sentence">ブランドを守りつつ貴社の財務を一気にスリム化します。</span>
+                    <span class="keep-sentence">長年滞留する</span><span class="keep-sentence">休眠ポイントは、</span><span class="keep-sentence">BSを圧迫し</span><span class="keep-sentence">損金否認による</span><span class="keep-sentence">税務上の非効率を</span><span class="keep-sentence">生んでいます。</span><span class="keep-sentence">本スキームは、</span><span class="keep-sentence">一方的な消滅による</span><span class="keep-sentence">レピュテーションリスクを</span><span class="keep-sentence">回避し、</span><br class="hidden md:inline">
+                    <span class="keep-sentence">「デジタルギフトへの</span><span class="keep-sentence">移行選択肢」という</span><span class="keep-sentence">誠実な顧客対応プロセスを</span><span class="keep-sentence">大義名分とすることで、</span><span class="keep-sentence">ブランドを守りつつ</span><span class="keep-sentence">貴社の財務を</span><span class="keep-sentence">一気にスリム化します。</span>
                 </p>
             </div>
 
@@ -151,7 +142,7 @@
                     </div>
                     <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">レピュテーションリスクの回避</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        <span class="keep-sentence">一方的なポイント失効に伴う</span><span class="keep-sentence">ブランド毀損を徹底的に抑え、</span><span class="keep-sentence">「ギフト移行機会の提供」という</span><span class="keep-sentence">誠実な手続きの事実（大義名分）を確立します。</span>
+                        <span class="keep-sentence">一方的なポイント失効に伴う</span><span class="keep-sentence">ブランド毀損を徹底的に抑え、</span><span class="keep-sentence">「ギフト移行機会の提供」という</span><span class="keep-sentence">誠実な手続きの事実（大義名分）を</span><span class="keep-sentence">確立します。</span>
                     </p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
@@ -160,7 +151,7 @@
                     </div>
                     <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">財務健全化の早期達成</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        <span class="keep-sentence">自然失効をただ待つだけでは</span><span class="keep-sentence">数年〜十数年かかる負債処理を、</span><span class="keep-sentence">デジタルギフトへの移行プロセスによって</span><span class="keep-sentence">今期中に一括かつクリーンに完了させます。</span>
+                        <span class="keep-sentence">自然失効をただ待つだけでは</span><span class="keep-sentence">数年〜十数年かかる負債処理を、</span><span class="keep-sentence">デジタルギフトへの</span><span class="keep-sentence">移行プロセスによって</span><span class="keep-sentence">今期中に一括かつ</span><span class="keep-sentence">クリーンに完了させます。</span>
                     </p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
@@ -169,7 +160,7 @@
                     </div>
                     <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">経済合理性の最大化</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        <span class="keep-sentence">支払いは割引価格（30%OFF等）のみ。</span><span class="keep-sentence">ユーザーの実際の利用有無を問わず、</span><span class="keep-sentence">貴社側の財務・税務改善効果は</span><span class="keep-sentence">契約時点で「100%確定」します。</span>
+                        <span class="keep-sentence">支払いは割引価格で</span><span class="keep-sentence">調達したギフトのみ。</span><span class="keep-sentence">ユーザーの実際の利用有無を問わず、</span><span class="keep-sentence">貴社側の財務・税務改善効果は</span><span class="keep-sentence">契約時点で</span><span class="keep-sentence">「100%確定」します。</span>
                     </p>
                 </div>
             </div>
@@ -190,7 +181,7 @@
                         <h3 class="text-md font-bold text-slate-800 keep-sentence">貴社の動き（役割）</h3>
                     </div>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        <span class="keep-sentence">検証モデル例として、</span><span class="keep-sentence">2年以上不稼働となっている</span><strong>休眠ポイント3.0億円分</strong>を特定。<span class="keep-sentence">デジタルプラスから提供される「額面3.0億円分」のデジタルギフトを、</span><strong>30%ディスカウント（2.1億円）</strong>で購入・決済します。
+                        <span class="keep-sentence">検証モデル例として、</span><span class="keep-sentence">2年以上不稼働となっている</span><strong>休眠ポイント3.0億円分</strong>を特定。<span class="keep-sentence">デジタルプラスから提供される</span><span class="keep-sentence">「額面3.0億円分」のデジタルギフトを、</span><span class="keep-sentence">任意の設定割引率（例：30%OFF）で購入・決済します。</span>
                     </p>
                 </div>
 
@@ -200,7 +191,7 @@
                         <h3 class="text-md font-bold text-slate-800 keep-sentence">デジタルプラスの役割</h3>
                     </div>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        <span class="keep-sentence">額面総額3.0億円分の高品質なデジタルギフトを</span><span class="keep-sentence">一括で発行・提供します。</span><span class="keep-sentence">ユーザーに付与された後の実際の利用、</span><span class="keep-sentence">および未利用分の失効・精算にまつわるすべての財務リスクを引き受けます。</span>
+                        <span class="keep-sentence">額面総額3.0億円分の</span><span class="keep-sentence">高品質なデジタルギフトを</span><span class="keep-sentence">一括で発行・提供します。</span><span class="keep-sentence">ユーザーに付与された後の実際の利用、</span><span class="keep-sentence">および未利用分の失効・精算にまつわるすべての財務リスクを引き受けます。</span>
                     </p>
                 </div>
 
@@ -210,7 +201,7 @@
                         <h3 class="text-md font-bold text-slate-800 keep-sentence">休眠ユーザーへの移行プロセス</h3>
                     </div>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        <span class="keep-sentence">対象の休眠顧客へ</span><span class="keep-sentence">「ポイント失効前の特例措置」として、</span><span class="keep-sentence">多様なブランドに換えられるデジタルギフトの選択権を提供。</span><span class="keep-sentence">権利を奪わずに代わりの経済的価値を提供する誠実なプロセスです。</span>
+                        <span class="keep-sentence">対象の休眠顧客へ</span><span class="keep-sentence">「ポイント失効前の</span><span class="keep-sentence">特例措置」として、</span><span class="keep-sentence">多様なブランドに</span><span class="keep-sentence">換えられる</span><span class="keep-sentence">デジタルギフトの</span><span class="keep-sentence">選択権を提供。</span><span class="keep-sentence">権利を奪わずに</span><span class="keep-sentence">代わりの</span><span class="keep-sentence">経済的価値を提供する</span><span class="keep-sentence">誠実なプロセスです。</span>
                     </p>
                 </div>
             </div>
@@ -241,6 +232,12 @@
                     </div>
 
                     <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">ギフト割引率 <span id="valDiscount" class="float-right font-bold text-blue-900 text-lg">30 %</span></label>
+                        <input type="range" id="inputDiscount" min="0" max="50" step="1" value="30">
+                        <p class="text-xs text-slate-500 mt-1">ギフト銘柄やボリュームに応じて変動</p>
+                    </div>
+
+                    <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-700 mb-2">ギフト販売手数料率 <span id="valCommission" class="float-right font-bold text-blue-900 text-lg">5.0 %</span></label>
                         <input type="range" id="inputCommission" min="0" max="10" step="0.5" value="5">
                         <p class="text-xs text-slate-500 mt-1 text-red-600 font-medium">※PL改善効果を最大化するため要相談・柔軟調整可</p>
@@ -248,7 +245,6 @@
 
                     <div class="bg-slate-50 p-4 rounded-lg mt-8 text-sm text-slate-600">
                         <ul class="space-y-2">
-                            <li><i class="fa-solid fa-check text-blue-600 mr-2"></i>ギフト割引率: <strong>30.0%</strong> (固定)</li>
                             <li><i class="fa-solid fa-check text-blue-600 mr-2"></i>法人税実効税率: <strong>35.0%</strong> (固定)</li>
                         </ul>
                     </div>
@@ -323,7 +319,7 @@
                             <span class="keep-sentence">ポイント引当金は単なる「見積り」であるため、税務上は損金として認められません（損金否認）。</span>
                         </p>
                         <p>
-                            <span class="keep-sentence">しかし、本スキームに基づき、</span><span class="keep-sentence">デジタルプラスから「デジタルギフト（商品引換券・金券）」を特別割引価格で購入し、</span><span class="keep-sentence">代金決済を行うことで、</span><strong class="text-blue-900 font-bold">貴社の購入代金支出（債務）は法的に完全に「確定」</strong><span class="keep-sentence">します。</span>
+                            <span class="keep-sentence">しかし、本スキームに基づき、</span><span class="keep-sentence">デジタルプラスから「デジタルギフト」を</span><span class="keep-sentence"><span id="txtTaxDiscount">30</span>%割引価格で購入し、</span><span class="keep-sentence">代金決済を行うことで、</span><strong class="text-blue-900 font-bold">貴社の購入代金支出（債務）は法的に完全に「確定」</strong><span class="keep-sentence">します。</span>
                         </p>
                         <p>
                             <span class="keep-sentence">これにより、法人税法上の損金要件である「事業年度末までに義務が成立し、原因事実が発生し、金額が合理的に算定できること」を完全に満たし、</span><span class="keep-sentence">今期の確定損金（経費）として一挙に容認されるロジックとなります。</span>
@@ -422,11 +418,14 @@
 
         <section id="partnership" class="mb-10">
             <div class="bg-blue-900 text-white rounded-2xl p-8 md:p-12 shadow-lg">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6">持続可能なパートナーシップとリスク共有</h2>
+                <h2 class="text-2xl md:text-3xl font-bold mb-6 tracking-wide">持続可能なパートナーシップとリスク共有</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div>
-                        <h3 class="text-xl font-bold mb-4 text-blue-200 border-b border-blue-700 pb-2"><i class="fa-solid fa-shield-halved mr-2"></i>貴社は100%ノーリスク</h3>
+                        <h3 class="text-xl font-bold mb-4 text-blue-200 border-b border-blue-700 pb-2 flex items-center">
+                            <i class="fa-solid fa-shield-halved mr-2"></i>
+                            <span class="keep-sentence">貴社は100%ノーリスク</span>
+                        </h3>
                         <p class="text-blue-50 text-sm leading-relaxed">
                             <span class="keep-sentence">デジタルギフトへの移行後、ユーザーの実際の利用状況にかかわらず、</span><br>
                             <span class="font-bold text-white bg-blue-800 px-1 rounded keep-sentence">貴社の財務メリット（PL・税務）が変動・減少することは一切ありません。</span><br>
@@ -435,9 +434,12 @@
                     </div>
                     
                     <div>
-                        <h3 class="text-xl font-bold mb-4 text-blue-200 border-b border-blue-700 pb-2"><i class="fa-solid fa-handshake mr-2"></i>協調的なPDCAの実施</h3>
+                        <h3 class="text-xl font-bold mb-4 text-blue-200 border-b border-blue-700 pb-2 flex items-center">
+                            <i class="fa-solid fa-handshake mr-2"></i>
+                            <span class="keep-sentence">協調的なPDCAの実施</span>
+                        </h3>
                         <p class="text-blue-50 text-sm leading-relaxed">
-                            <span class="keep-sentence">デジタルプラスは、特別割引（30%OFF）で提供しているため、</span><span class="keep-sentence">実際の失効率が「30%を下回る」と持ち出し（赤字）となります。</span><span class="keep-sentence">両社にとって持続可能な取り組みとなるよう、</span><span class="keep-sentence">告知方法や移行プロセス、期間設定の最適化など、</span><span class="keep-sentence">利用動向をコントロールするためのPDCAをご一緒に回していければ幸いです。</span>
+                            <span class="keep-sentence">デジタルプラスは、調達割引（<span id="txtPartDiscount">30</span>%OFF等）で提供しているため、</span><span class="keep-sentence">実際の失効率が割引率を下回ると持ち出し（赤字）となります。</span><span class="keep-sentence">両社にとって持続可能な取り組みとなるよう、</span><span class="keep-sentence">利用動向をコントロールするためのPDCAをご一緒に回していければ幸いです。</span>
                         </p>
                     </div>
                 </div>
@@ -455,19 +457,23 @@
         const inputs = {
             points: document.getElementById('inputPoints'),
             provision: document.getElementById('inputProvision'),
-            commission: document.getElementById('inputCommission')
+            commission: document.getElementById('inputCommission'),
+            discount: document.getElementById('inputDiscount')
         };
 
         const displays = {
             valPoints: document.getElementById('valPoints'),
             valProvision: document.getElementById('valProvision'),
             valCommission: document.getElementById('valCommission'),
+            valDiscount: document.getElementById('valDiscount'),
             outPlProfit: document.getElementById('outPlProfit'),
             outLiabilities: document.getElementById('outLiabilities'),
             outTaxBenefit: document.getElementById('outTaxBenefit'),
             outNetBurden: document.getElementById('outNetBurden'),
             txtCashOut: document.getElementById('txtCashOut'),
-            txtTaxNote: document.getElementById('txtTaxNote')
+            txtTaxNote: document.getElementById('txtTaxNote'),
+            txtTaxDiscount: document.getElementById('txtTaxDiscount'),
+            txtPartDiscount: document.getElementById('txtPartDiscount')
         };
 
         const tbl = {
@@ -507,10 +513,16 @@
             state.targetPoints = parseFloat(inputs.points.value);
             state.provisionRate = parseFloat(inputs.provision.value) / 100;
             state.commissionRate = parseFloat(inputs.commission.value) / 100;
+            state.discountRate = parseFloat(inputs.discount.value) / 100;
 
             displays.valPoints.innerText = formatNum(state.targetPoints) + " 百万円";
             displays.valProvision.innerText = formatNum(state.provisionRate * 100) + " %";
             displays.valCommission.innerText = formatNum(state.commissionRate * 100) + " %";
+            displays.valDiscount.innerText = formatNum(state.discountRate * 100) + " %";
+            
+            // 税務・パートナーシップのテキスト内数値も更新
+            displays.txtTaxDiscount.innerText = Math.round(state.discountRate * 100);
+            displays.txtPartDiscount.innerText = Math.round(state.discountRate * 100);
 
             const liability = state.targetPoints * state.provisionRate;
             const giftCost = state.targetPoints * (1 - state.discountRate);
