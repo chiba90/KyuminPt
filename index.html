@@ -253,22 +253,11 @@
                 </div>
 
                 <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-blue-600 flex flex-col justify-between relative overflow-hidden">
-                        <div class="absolute top-4 right-4 text-blue-100 text-3xl"><i class="fa-solid fa-arrow-trend-up"></i></div>
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">① 今期 PL 純利益の創出</h4>
-                            <div class="font-poppins text-3xl font-bold text-blue-900 mb-1">+<span id="outPlProfit">15.0</span> <span class="text-lg text-slate-600 font-normal">百万円</span></div>
-                            <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">引当金戻入益から、ギフト購入費と支払手数料を差し引いた確定利益。</p>
-                        </div>
-                        <div class="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded border border-slate-200" id="formulaPlProfit">
-                            式: --
-                        </div>
-                    </div>
-
+                    <!-- ① BS負債の即時圧縮 (起点) -->
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-teal-500 flex flex-col justify-between relative overflow-hidden">
                         <div class="absolute top-4 right-4 text-teal-50 text-3xl"><i class="fa-solid fa-weight-scale"></i></div>
                         <div>
-                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">② BS 負債の即時圧縮</h4>
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">① BS 負債の即時圧縮</h4>
                             <div class="font-poppins text-3xl font-bold text-teal-600 mb-1">▲<span id="outLiabilities">240.0</span> <span class="text-lg text-slate-600 font-normal">百万円</span></div>
                             <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">BSに滞留していたポイント引当金（負債）が即座に消滅。自己資本比率改善。</p>
                         </div>
@@ -277,6 +266,20 @@
                         </div>
                     </div>
 
+                    <!-- ② 今期PL純利益の創出 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-blue-600 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-blue-100 text-3xl"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">② 今期 PL 純利益の創出</h4>
+                            <div class="font-poppins text-3xl font-bold text-blue-900 mb-1">+<span id="outPlProfit">15.0</span> <span class="text-lg text-slate-600 font-normal">百万円</span></div>
+                            <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">引当金戻入益から、ギフト購入費と支払手数料を差し引いた確定利益。</p>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded border border-slate-200" id="formulaPlProfit">
+                            式: --
+                        </div>
+                    </div>
+
+                    <!-- ③ 確実な損金容認 -->
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-amber-500 flex flex-col justify-between relative overflow-hidden">
                         <div class="absolute top-4 right-4 text-amber-50 text-3xl"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                         <div>
@@ -289,6 +292,7 @@
                         </div>
                     </div>
 
+                    <!-- ④ 実質キャッシュ負担額 -->
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-indigo-500 flex flex-col justify-between relative overflow-hidden">
                         <div class="absolute top-4 right-4 text-indigo-50 text-3xl"><i class="fa-solid fa-wallet"></i></div>
                         <div>
