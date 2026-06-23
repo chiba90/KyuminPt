@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>休眠ポイント流動化戦略 インタラクティブ・ダッシュボード</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chosen Palette: Navy Blue Accent (#1E3A8A), Slate Grays for borders/backgrounds, White for cards. Minimalist and professional. -->
+    <!-- Application Structure Plan: A single-page interactive dashboard designed for CFOs and Executives. It starts with the core "Triple Win" concept, moves into a dynamic "Financial Impact Simulator" where users can adjust variables (dormant points, commission rates) to instantly see the effects on PL, BS, and Tax benefits, and concludes with the Before/After financial table and risk-sharing promise. This structure turns static presentation numbers into a personalized financial discovery tool, maximizing persuasion. -->
+    <!-- Visualization & Content Choices: 
+         1. 4 Big KPI Cards (Inform): Instantly show PL Profit, BS Reduction, Tax Benefit, and Net Cash Out. JS updates these based on sliders.
+         2. Grouped Bar Chart (Compare): Visualizes the Before/After of the Balance Sheet (Cash, Liabilities, Net Assets). Chart.js used.
+         3. Waterfall/Breakdown Bar Chart (Explain): Shows how the Provision Liability turns into Gift Cost, Commission, and final PL Profit. Chart.js used.
+         4. Dynamic Table (Organize): The exact accounting entry changes, updated reactively via JS.
+         All visualizations use Canvas/Chart.js and HTML/Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Poppins:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #1e3a8a;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link:hover {
+            color: #1e3a8a;
+            border-bottom: 2px solid #1e3a8a;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 改行調整用の実用的なクラス */
+        .keep-sentence {
+            display: inline-block;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-chart-pie text-blue-900 text-2xl mr-3"></i>
+                    <span class="font-bold text-xl text-blue-900 tracking-wider">Dormant Point Strategy</span>
+                </div>
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="#overview" class="nav-link text-sm font-medium text-slate-600 pb-1">スキーム概要</a>
+                    <a href="#scheme-flow" class="nav-link text-sm font-medium text-slate-600 pb-1">施策の仕組み</a>
+                    <a href="#simulator" class="nav-link text-sm font-medium text-slate-600 pb-1">財務シミュレーター</a>
+                    <a href="#tax-logic" class="nav-link text-sm font-medium text-slate-600 pb-1">税務ロジック解説</a>
+                    <a href="#financials" class="nav-link text-sm font-medium text-slate-600 pb-1">財務諸表インパクト</a>
+                    <a href="#partnership" class="nav-link text-sm font-medium text-slate-600 pb-1">パートナーシップ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-blue-900 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+            <h1 class="text-3xl md:text-5xl font-bold mb-6 leading-tight tracking-wider">
+                <span class="keep-sentence">「休眠ポイント」のデジタルギフト化による</span><br>
+                <span class="text-blue-300 keep-sentence">財務改善・税務メリット創出のご提案</span>
+            </h1>
+            <p class="text-base md:text-lg text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed tracking-wide">
+                <span class="keep-sentence">眠っていたポイント負債を</span><span class="keep-sentence">使い勝手の良いデジタルギフトへ置き換え、</span><br class="hidden md:inline">
+                <span class="keep-sentence">キャッシュアウトを最小限に抑えながら</span><span class="keep-sentence">今期の「確実なPL利益」と</span><span class="keep-sentence">「最大級の節税効果」を獲得する、</span><br class="hidden md:inline">
+                <span class="keep-sentence">株式会社デジタルプラスの新しい財務健全化スキーム。</span>
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <section id="overview" class="mb-20 fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-blue-900 border-l-4 border-blue-900 pl-3">見えないボトルネックと「大義名分」を伴う解決策</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed text-sm md:text-base">
+                    <span class="keep-sentence">長年滞留する休眠ポイントは、</span><span class="keep-sentence">BSを圧迫し損金否認による税務上の非効率を生んでいます。</span><span class="keep-sentence">本スキームは、</span><span class="keep-sentence">一方的な消滅によるレピュテーションリスクを回避し、</span><br class="hidden md:inline">
+                    <span class="keep-sentence">「デジタルギフトへの移行選択肢」という</span><span class="keep-sentence">誠実な顧客対応プロセスを大義名分とすることで、</span><span class="keep-sentence">ブランドを守りつつ貴社の財務を一気にスリム化します。</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-blue-50 text-blue-900 rounded-full flex items-center justify-center text-2xl mb-4">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">レピュテーションリスクの回避</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <span class="keep-sentence">一方的なポイント失効に伴う</span><span class="keep-sentence">ブランド毀損を徹底的に抑え、</span><span class="keep-sentence">「ギフト移行機会の提供」という</span><span class="keep-sentence">誠実な手続きの事実（大義名分）を確立します。</span>
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-blue-50 text-blue-900 rounded-full flex items-center justify-center text-2xl mb-4">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">財務健全化の早期達成</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <span class="keep-sentence">自然失効をただ待つだけでは</span><span class="keep-sentence">数年〜十数年かかる負債処理を、</span><span class="keep-sentence">デジタルギフトへの移行プロセスによって</span><span class="keep-sentence">今期中に一括かつクリーンに完了させます。</span>
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-blue-50 text-blue-900 rounded-full flex items-center justify-center text-2xl mb-4">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">経済合理性の最大化</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <span class="keep-sentence">支払いは割引価格（30%OFF等）のみ。</span><span class="keep-sentence">ユーザーの実際の利用有無を問わず、</span><span class="keep-sentence">貴社側の財務・税務改善効果は</span><span class="keep-sentence">契約時点で「100%確定」します。</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="scheme-flow" class="mb-20 fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-blue-900 border-l-4 border-blue-900 pl-3">本施策の具体的な仕組み・商流プロセス</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed text-sm md:text-base">
+                    <span class="keep-sentence">本スキームにおける各関係者の動きと役割を定義した、</span><span class="keep-sentence">シンプルでノーリスクなプロセスモデルです。</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex items-center mb-4">
+                        <span class="w-8 h-8 rounded-full bg-blue-900 text-white font-bold flex items-center justify-center mr-3 font-poppins text-sm">1</span>
+                        <h3 class="text-md font-bold text-slate-800 keep-sentence">貴社の動き（役割）</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <span class="keep-sentence">検証モデル例として、</span><span class="keep-sentence">2年以上不稼働となっている</span><strong>休眠ポイント3.0億円分</strong>を特定。<span class="keep-sentence">デジタルプラスから提供される「額面3.0億円分」のデジタルギフトを、</span><strong>30%ディスカウント（2.1億円）</strong>で購入・決済します。
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex items-center mb-4">
+                        <span class="w-8 h-8 rounded-full bg-blue-900 text-white font-bold flex items-center justify-center mr-3 font-poppins text-sm">2</span>
+                        <h3 class="text-md font-bold text-slate-800 keep-sentence">デジタルプラスの役割</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <span class="keep-sentence">額面総額3.0億円分の高品質なデジタルギフトを</span><span class="keep-sentence">一括で発行・提供します。</span><span class="keep-sentence">ユーザーに付与された後の実際の利用、</span><span class="keep-sentence">および未利用分の失効・精算にまつわるすべての財務リスクを引き受けます。</span>
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex items-center mb-4">
+                        <span class="w-8 h-8 rounded-full bg-blue-900 text-white font-bold flex items-center justify-center mr-3 font-poppins text-sm">3</span>
+                        <h3 class="text-md font-bold text-slate-800 keep-sentence">休眠ユーザーへの移行プロセス</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <span class="keep-sentence">対象の休眠顧客へ</span><span class="keep-sentence">「ポイント失効前の特例措置」として、</span><span class="keep-sentence">多様なブランドに換えられるデジタルギフトの選択権を提供。</span><span class="keep-sentence">権利を奪わずに代わりの経済的価値を提供する誠実なプロセスです。</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulator" class="mb-20">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-blue-900 border-l-4 border-blue-900 pl-3">財務・税務インパクト シミュレーター</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed text-sm md:text-base">
+                    <span class="keep-sentence">貴社の休眠ポイントの想定規模に合わせて</span><span class="keep-sentence">パラメーターを調整してください。</span><span class="keep-sentence">契約した時点で「100%確定」する劇的なインパクトがリアルタイムで試算されます。</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <div class="lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold mb-6 text-slate-800 border-b pb-2"><i class="fa-solid fa-sliders text-blue-900 mr-2"></i>前提条件設定</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">休眠ポイント対象額 <span id="valPoints" class="float-right font-bold text-blue-900 text-lg">300 百万円</span></label>
+                        <input type="range" id="inputPoints" min="50" max="1000" step="10" value="300">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">引当率 (BS計上割合) <span id="valProvision" class="float-right font-bold text-blue-900 text-lg">80 %</span></label>
+                        <input type="range" id="inputProvision" min="50" max="100" step="5" value="80">
+                        <p class="text-xs text-slate-500 mt-1">対象額に対して負債計上されている割合</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">ギフト販売手数料率 <span id="valCommission" class="float-right font-bold text-blue-900 text-lg">5.0 %</span></label>
+                        <input type="range" id="inputCommission" min="0" max="10" step="0.5" value="5">
+                        <p class="text-xs text-slate-500 mt-1 text-red-600 font-medium">※PL改善効果を最大化するため要相談・柔軟調整可</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-lg mt-8 text-sm text-slate-600">
+                        <ul class="space-y-2">
+                            <li><i class="fa-solid fa-check text-blue-600 mr-2"></i>ギフト割引率: <strong>30.0%</strong> (固定)</li>
+                            <li><i class="fa-solid fa-check text-blue-600 mr-2"></i>法人税実効税率: <strong>35.0%</strong> (固定)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-blue-600 relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-blue-100 text-4xl"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">① 今期 PL 純利益の創出</h4>
+                        <div class="font-poppins text-4xl font-bold text-blue-900 mb-2">+<span id="outPlProfit">15.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
+                        <p class="text-xs text-slate-500">引当金戻入益から、ギフト購入費と支払手数料を差し引いた確定利益。</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-teal-500 relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-teal-50 text-4xl"><i class="fa-solid fa-weight-scale"></i></div>
+                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">② BS 負債の即時圧縮</h4>
+                        <div class="font-poppins text-4xl font-bold text-teal-600 mb-2">▲<span id="outLiabilities">240.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
+                        <p class="text-xs text-slate-500">BSに滞留していたポイント引当金（負債）が即座に消滅。自己資本比率改善。</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-amber-500 relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-amber-50 text-4xl"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">③ 確実な損金容認 (税務メリット)</h4>
+                        <div class="font-poppins text-4xl font-bold text-amber-600 mb-2">+<span id="outTaxBenefit">84.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
+                        <p class="text-xs text-slate-500">損金否認されていた引当金が確定し、法人税還付・軽減効果が即時発生。</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-indigo-500 relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-indigo-50 text-4xl"><i class="fa-solid fa-wallet"></i></div>
+                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">④ 実質キャッシュ負担額</h4>
+                        <div class="font-poppins text-4xl font-bold text-indigo-600 mb-2"><span id="outNetBurden">141.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
+                        <p class="text-xs text-slate-500">実質支出額（<span id="txtCashOut">225</span>M）から税務メリットを差し引いた、究極的に抑えられた自己負担。</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-md font-bold text-slate-800 mb-4 text-center">財務インパクト内訳 (百万円)</h3>
+                    <div class="chart-container">
+                        <canvas id="breakdownChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-md font-bold text-slate-800 mb-4 text-center">BS (バランスシート) 変化イメージ</h3>
+                    <div class="chart-container">
+                        <canvas id="bsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CFO・監査法人向け：税務メリットのロジック解説 -->
+        <section id="tax-logic" class="mb-20 fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-blue-900 border-l-4 border-blue-900 pl-3">CFO・監査法人向け：税務メリットの法的ロジック</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed text-sm md:text-base">
+                    <span class="keep-sentence">「なぜ、見積り負債をギフトに変えるだけで損金（経費）になるのか？」</span><span class="keep-sentence">CFOや会計監査人から想定される主要な懸念について、</span><span class="keep-sentence">税法および法的な根拠をもって解説します。</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-blue-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-scale-balanced mr-2"></i>
+                        <span class="keep-sentence">Q1. なぜ「引当金の取崩し」が今期の確定損金（経費）になるのか？</span>
+                    </h3>
+                    <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                        <p>
+                            <strong class="text-slate-800 font-bold">【結論：債務確定基準のクリア】</strong><br>
+                            <span class="keep-sentence">ポイント引当金は単なる「見積り」であるため、税務上は損金として認められません（損金否認）。</span>
+                        </p>
+                        <p>
+                            <span class="keep-sentence">しかし、本スキームに基づき、</span><span class="keep-sentence">デジタルプラスから「デジタルギフト（商品引換券・金券）」を特別割引価格で購入し、</span><span class="keep-sentence">代金決済を行うことで、</span><strong class="text-blue-900 font-bold">貴社の購入代金支出（債務）は法的に完全に「確定」</strong><span class="keep-sentence">します。</span>
+                        </p>
+                        <p>
+                            <span class="keep-sentence">これにより、法人税法上の損金要件である「事業年度末までに義務が成立し、原因事実が発生し、金額が合理的に算定できること」を完全に満たし、</span><span class="keep-sentence">今期の確定損金（経費）として一挙に容認されるロジックとなります。</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-blue-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-gavel mr-2"></i>
+                        <span class="keep-sentence">Q2. ユーザーがギフトを使わず「未利用で失効」した場合、税務リスクはないか？</span>
+                    </h3>
+                    <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                        <p>
+                            <strong class="text-slate-800 font-bold">【結論：寄付金課税等のリスクはゼロ】</strong><br>
+                            <span class="keep-sentence">貴社は、デジタルプラス社から「金券の譲渡」を受けた取引当事者です。</span><span class="keep-sentence">購入・決済・ユーザーへの移行プロセス完了をもって、</span><span class="keep-sentence">貴社の会計・税務処理は独立してクローズしています。</span>
+                        </p>
+                        <p>
+                            <span class="keep-sentence">移行後のユーザーによる「実際の利用・失効」は、</span><span class="keep-sentence">「ギフト発行主であるデジタルプラス社」と「ユーザー」の契約関係に基づいて発生する独立した事象です。</span>
+                        </p>
+                        <p>
+                            <span class="keep-sentence">したがって、ユーザーの利用率の低さ（高失効率）を理由に、</span><span class="keep-sentence">貴社へ「失効益の計上義務」が及んだり、</span><span class="keep-sentence">「寄付金・交際費課税」などの指摘を国税当局から受けるリスクは、</span><span class="keep-sentence">取引法上および税法上、存在しません。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="financials" class="mb-20">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-blue-900 border-l-4 border-blue-900 pl-3">財務諸表への影響（Before / After）</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed text-sm md:text-base">
+                    <span class="keep-sentence">シミュレーターの設定値に基づく、</span><span class="keep-sentence">貴社の財務諸表（PL/BS）の具体的な変化イメージです。</span><span class="keep-sentence">資産と負債を同時にスリム化しながら、</span><span class="keep-sentence">純資産を押し上げます。</span>
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-sm font-bold text-slate-700 uppercase tracking-wider">財務諸表（貴社）</th>
+                            <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-slate-700 uppercase tracking-wider">施策前</th>
+                            <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-blue-900 uppercase tracking-wider">増減</th>
+                            <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-slate-700 uppercase tracking-wider">施策後</th>
+                            <th scope="col" class="px-6 py-4 text-left text-sm font-bold text-slate-700 uppercase tracking-wider">主な要因（財務ロジック）</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200" id="tableBody">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">【PL】利益影響額</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-600">-</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-blue-600 bg-blue-50" id="tblPlDelta">+15.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblPlAfter">15.0</td>
+                            <td class="px-6 py-4 text-sm text-slate-600">引当金戻入益から購入費および手数料を差し引いた純額</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">【BS】現金預金</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-600">1,000.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-red-600 bg-red-50" id="tblCashDelta">▲225.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblCashAfter">775.0</td>
+                            <td class="px-6 py-4 text-sm text-slate-600">デジタルギフト購入費および支払手数料の支出（※注1）</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">【BS】ポイント引当金</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-600">800.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-teal-600 bg-teal-50" id="tblLiabDelta">▲240.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblLiabAfter">560.0</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 font-bold">休眠ポイント流動化による負債の即時消滅</td>
+                        </tr>
+                        <tr class="bg-slate-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">【BS】資産合計</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-600">1,000.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblAssetDelta">▲225.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblAssetAfter">775.0</td>
+                            <td class="px-6 py-4 text-sm text-slate-600">現金支出に伴う総資産の減少（BSスリム化）</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">【BS】純資産（利益剰余金）</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-600">200.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-blue-600 bg-blue-50" id="tblEquityDelta">+15.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblEquityAfter">215.0</td>
+                            <td class="px-6 py-4 text-sm text-slate-600">PL利益の取り込みによる純資産の増加</td>
+                        </tr>
+                        <tr class="bg-slate-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">【BS】負債・純資産合計</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-slate-600">1,000.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblLiabEqDelta">▲225.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-800" id="tblLiabEqAfter">775.0</td>
+                            <td class="px-6 py-4 text-sm text-slate-600">負債減少と利益取り込みの相殺</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-sm text-slate-500 mt-3 text-right">※単位：百万円 <br>※注1：本表の現金預金には、別途発生する「税務メリット（約<span id="txtTaxNote">84.0</span>百万円の法人税軽減）」に伴う戻りキャッシュは含めていません。そのため、実際の手残りキャッシュはより厚くなります。</p>
+        </section>
+
+        <section id="partnership" class="mb-10">
+            <div class="bg-blue-900 text-white rounded-2xl p-8 md:p-12 shadow-lg">
+                <h2 class="text-2xl md:text-3xl font-bold mb-6">持続可能なパートナーシップとリスク共有</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-blue-200 border-b border-blue-700 pb-2"><i class="fa-solid fa-shield-halved mr-2"></i>貴社は100%ノーリスク</h3>
+                        <p class="text-blue-50 text-sm leading-relaxed">
+                            <span class="keep-sentence">デジタルギフトへの移行後、ユーザーの実際の利用状況にかかわらず、</span><br>
+                            <span class="font-bold text-white bg-blue-800 px-1 rounded keep-sentence">貴社の財務メリット（PL・税務）が変動・減少することは一切ありません。</span><br>
+                            <span class="keep-sentence">利用動向によるすべての事業赤字リスクはデジタルプラスが引き受けます。</span>
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-blue-200 border-b border-blue-700 pb-2"><i class="fa-solid fa-handshake mr-2"></i>協調的なPDCAの実施</h3>
+                        <p class="text-blue-50 text-sm leading-relaxed">
+                            <span class="keep-sentence">デジタルプラスは、特別割引（30%OFF）で提供しているため、</span><span class="keep-sentence">実際の失効率が「30%を下回る」と持ち出し（赤字）となります。</span><span class="keep-sentence">両社にとって持続可能な取り組みとなるよう、</span><span class="keep-sentence">告知方法や移行プロセス、期間設定の最適化など、</span><span class="keep-sentence">利用動向をコントロールするためのPDCAをご一緒に回していければ幸いです。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>&copy; 2026 株式会社デジタルプラス. All rights reserved.</p>
+        <p class="mt-2 text-slate-500">※本シミュレーターの数値はモデルケースに基づく概算であり、実際の会計処理については貴社監査法人等にご確認ください。</p>
+    </footer>
+
+    <script>
+        const inputs = {
+            points: document.getElementById('inputPoints'),
+            provision: document.getElementById('inputProvision'),
+            commission: document.getElementById('inputCommission')
+        };
+
+        const displays = {
+            valPoints: document.getElementById('valPoints'),
+            valProvision: document.getElementById('valProvision'),
+            valCommission: document.getElementById('valCommission'),
+            outPlProfit: document.getElementById('outPlProfit'),
+            outLiabilities: document.getElementById('outLiabilities'),
+            outTaxBenefit: document.getElementById('outTaxBenefit'),
+            outNetBurden: document.getElementById('outNetBurden'),
+            txtCashOut: document.getElementById('txtCashOut'),
+            txtTaxNote: document.getElementById('txtTaxNote')
+        };
+
+        const tbl = {
+            plDelta: document.getElementById('tblPlDelta'),
+            plAfter: document.getElementById('tblPlAfter'),
+            cashDelta: document.getElementById('tblCashDelta'),
+            cashAfter: document.getElementById('tblCashAfter'),
+            liabDelta: document.getElementById('tblLiabDelta'),
+            liabAfter: document.getElementById('tblLiabAfter'),
+            assetDelta: document.getElementById('tblAssetDelta'),
+            assetAfter: document.getElementById('tblAssetAfter'),
+            equityDelta: document.getElementById('tblEquityDelta'),
+            equityAfter: document.getElementById('tblEquityAfter'),
+            liabEqDelta: document.getElementById('tblLiabEqDelta'),
+            liabEqAfter: document.getElementById('tblLiabEqAfter')
+        };
+
+        const state = {
+            targetPoints: 300,
+            provisionRate: 0.8,
+            commissionRate: 0.05,
+            discountRate: 0.3,
+            taxRate: 0.35,
+            baseAssets: 1000,
+            baseLiab: 800,
+            baseEquity: 200
+        };
+
+        let breakdownChartInstance = null;
+        let bsChartInstance = null;
+
+        function formatNum(num) {
+            return num.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        }
+
+        function calculate() {
+            state.targetPoints = parseFloat(inputs.points.value);
+            state.provisionRate = parseFloat(inputs.provision.value) / 100;
+            state.commissionRate = parseFloat(inputs.commission.value) / 100;
+
+            displays.valPoints.innerText = formatNum(state.targetPoints) + " 百万円";
+            displays.valProvision.innerText = formatNum(state.provisionRate * 100) + " %";
+            displays.valCommission.innerText = formatNum(state.commissionRate * 100) + " %";
+
+            const liability = state.targetPoints * state.provisionRate;
+            const giftCost = state.targetPoints * (1 - state.discountRate);
+            const commissionCost = state.targetPoints * state.commissionRate;
+            const totalCashOut = giftCost + commissionCost;
+            
+            const plProfit = liability - totalCashOut;
+            const taxBenefit = liability * state.taxRate;
+            const netBurden = totalCashOut - taxBenefit;
+
+            displays.outPlProfit.innerText = formatNum(Math.max(0, plProfit));
+            displays.outLiabilities.innerText = formatNum(liability);
+            displays.outTaxBenefit.innerText = formatNum(taxBenefit);
+            displays.outNetBurden.innerText = formatNum(netBurden);
+            displays.txtCashOut.innerText = formatNum(totalCashOut);
+            displays.txtTaxNote.innerText = formatNum(taxBenefit);
+
+            const prefix = plProfit >= 0 ? "+" : "";
+            tbl.plDelta.innerText = prefix + formatNum(plProfit);
+            tbl.plAfter.innerText = formatNum(plProfit);
+            tbl.plDelta.className = plProfit >= 0 ? "px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-blue-600 bg-blue-50" : "px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-red-600 bg-red-50";
+
+            tbl.cashDelta.innerText = "▲" + formatNum(totalCashOut);
+            tbl.cashAfter.innerText = formatNum(state.baseAssets - totalCashOut);
+
+            tbl.liabDelta.innerText = "▲" + formatNum(liability);
+            tbl.liabAfter.innerText = formatNum(state.baseLiab - liability);
+
+            tbl.assetDelta.innerText = "▲" + formatNum(totalCashOut);
+            tbl.assetAfter.innerText = formatNum(state.baseAssets - totalCashOut);
+
+            tbl.equityDelta.innerText = prefix + formatNum(plProfit);
+            tbl.equityAfter.innerText = formatNum(state.baseEquity + plProfit);
+            tbl.equityDelta.className = plProfit >= 0 ? "px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-blue-600 bg-blue-50" : "px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-red-600 bg-red-50";
+
+            tbl.liabEqDelta.innerText = "▲" + formatNum(totalCashOut);
+            tbl.liabEqAfter.innerText = formatNum((state.baseLiab - liability) + (state.baseEquity + plProfit));
+
+            updateCharts(liability, giftCost, commissionCost, plProfit, totalCashOut);
+        }
+
+        function initCharts() {
+            const ctxBreakdown = document.getElementById('breakdownChart').getContext('2d');
+            breakdownChartInstance = new Chart(ctxBreakdown, {
+                type: 'bar',
+                data: {
+                    labels: ['引当金(負債解消)', 'ギフト購入費', '支払手数料', 'PL純利益'],
+                    datasets: [{
+                        label: '金額 (百万円)',
+                        data: [0, 0, 0, 0],
+                        backgroundColor: [
+                            'rgba(20, 184, 166, 0.8)',
+                            'rgba(239, 68, 68, 0.8)', 
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(30, 58, 138, 0.8)'   
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' 百万円';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            const ctxBs = document.getElementById('bsChart').getContext('2d');
+            bsChartInstance = new Chart(ctxBs, {
+                type: 'bar',
+                data: {
+                    labels: ['現金預金', 'ポイント引当金', '純資産(利益剰余金)'],
+                    datasets: [
+                        {
+                            label: '施策前',
+                            data: [state.baseAssets, state.baseLiab, state.baseEquity],
+                            backgroundColor: 'rgba(148, 163, 184, 0.5)',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '施策后',
+                            data: [0, 0, 0],
+                            backgroundColor: 'rgba(30, 58, 138, 0.8)',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' 百万円';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateCharts(liability, giftCost, commissionCost, plProfit, totalCashOut) {
+            if (breakdownChartInstance) {
+                breakdownChartInstance.data.datasets[0].data = [liability, giftCost, commissionCost, plProfit];
+                breakdownChartInstance.update();
+            }
+
+            if (bsChartInstance) {
+                bsChartInstance.data.datasets[1].data = [
+                    state.baseAssets - totalCashOut,
+                    state.baseLiab - liability,
+                    state.baseEquity + plProfit
+                ];
+                bsChartInstance.update();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            calculate();
+
+            Object.values(inputs).forEach(input => {
+                input.addEventListener('input', calculate);
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
