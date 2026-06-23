@@ -140,7 +140,7 @@
                     <div class="w-16 h-16 bg-blue-50 text-blue-900 rounded-full flex items-center justify-center text-2xl mb-4">
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">レピュテーションリスクの回避</h3>
+                    <h3 class="text-lg font-bold mb-2 text-slate-800 keep-sentence">レピュテーションリスク of 回避</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
                         <span class="keep-sentence">一方的なポイント失効に伴う</span><span class="keep-sentence">ブランド毀損を徹底的に抑え、</span><span class="keep-sentence">「ギフト移行機会の提供」という</span><span class="keep-sentence">誠実な手続きの事実（大義名分）を</span><span class="keep-sentence">確立します。</span>
                     </p>
@@ -217,33 +217,35 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                <div class="lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h3 class="text-lg font-bold mb-6 text-slate-800 border-b pb-2"><i class="fa-solid fa-sliders text-blue-900 mr-2"></i>前提条件設定</h3>
-                    
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-700 mb-2">休眠ポイント対象額 <span id="valPoints" class="float-right font-bold text-blue-900 text-lg">300 百万円</span></label>
-                        <input type="range" id="inputPoints" min="50" max="1000" step="10" value="300">
+                <div class="lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold mb-6 text-slate-800 border-b pb-2"><i class="fa-solid fa-sliders text-blue-900 mr-2"></i>前提条件設定</h3>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">休眠ポイント対象額 <span id="valPoints" class="float-right font-bold text-blue-900 text-lg">300 百万円</span></label>
+                            <input type="range" id="inputPoints" min="50" max="1000" step="10" value="300">
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">引当率 (BS計上割合) <span id="valProvision" class="float-right font-bold text-blue-900 text-lg">80 %</span></label>
+                            <input type="range" id="inputProvision" min="50" max="100" step="5" value="80">
+                            <p class="text-xs text-slate-500 mt-1">対象額に対して負債計上されている割合</p>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">ギフト割引率 <span id="valDiscount" class="float-right font-bold text-blue-900 text-lg">30 %</span></label>
+                            <input type="range" id="inputDiscount" min="0" max="50" step="1" value="30">
+                            <p class="text-xs text-slate-500 mt-1">ギフト銘柄やボリュームに応じて変動</p>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">ギフト販売手数料率 <span id="valCommission" class="float-right font-bold text-blue-900 text-lg">5.0 %</span></label>
+                            <input type="range" id="inputCommission" min="0" max="10" step="0.5" value="5">
+                            <p class="text-xs text-slate-500 mt-1 text-red-600 font-medium">※PL改善効果を最大化するため要相談・柔軟調整可</p>
+                        </div>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-700 mb-2">引当率 (BS計上割合) <span id="valProvision" class="float-right font-bold text-blue-900 text-lg">80 %</span></label>
-                        <input type="range" id="inputProvision" min="50" max="100" step="5" value="80">
-                        <p class="text-xs text-slate-500 mt-1">対象額に対して負債計上されている割合</p>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-700 mb-2">ギフト割引率 <span id="valDiscount" class="float-right font-bold text-blue-900 text-lg">30 %</span></label>
-                        <input type="range" id="inputDiscount" min="0" max="50" step="1" value="30">
-                        <p class="text-xs text-slate-500 mt-1">ギフト銘柄やボリュームに応じて変動</p>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-700 mb-2">ギフト販売手数料率 <span id="valCommission" class="float-right font-bold text-blue-900 text-lg">5.0 %</span></label>
-                        <input type="range" id="inputCommission" min="0" max="10" step="0.5" value="5">
-                        <p class="text-xs text-slate-500 mt-1 text-red-600 font-medium">※PL改善効果を最大化するため要相談・柔軟調整可</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-4 rounded-lg mt-8 text-sm text-slate-600">
+                    <div class="bg-slate-50 p-4 rounded-lg mt-4 text-sm text-slate-600">
                         <ul class="space-y-2">
                             <li><i class="fa-solid fa-check text-blue-600 mr-2"></i>法人税実効税率: <strong>35.0%</strong> (固定)</li>
                         </ul>
@@ -251,32 +253,52 @@
                 </div>
 
                 <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-blue-600 relative overflow-hidden">
-                        <div class="absolute top-4 right-4 text-blue-100 text-4xl"><i class="fa-solid fa-arrow-trend-up"></i></div>
-                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">① 今期 PL 純利益の創出</h4>
-                        <div class="font-poppins text-4xl font-bold text-blue-900 mb-2">+<span id="outPlProfit">15.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
-                        <p class="text-xs text-slate-500">引当金戻入益から、ギフト購入費と支払手数料を差し引いた確定利益。</p>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-blue-600 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-blue-100 text-3xl"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">① 今期 PL 純利益の創出</h4>
+                            <div class="font-poppins text-3xl font-bold text-blue-900 mb-1">+<span id="outPlProfit">15.0</span> <span class="text-lg text-slate-600 font-normal">百万円</span></div>
+                            <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">引当金戻入益から、ギフト購入費と支払手数料を差し引いた確定利益。</p>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded border border-slate-200" id="formulaPlProfit">
+                            式: --
+                        </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-teal-500 relative overflow-hidden">
-                        <div class="absolute top-4 right-4 text-teal-50 text-4xl"><i class="fa-solid fa-weight-scale"></i></div>
-                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">② BS 負債の即時圧縮</h4>
-                        <div class="font-poppins text-4xl font-bold text-teal-600 mb-2">▲<span id="outLiabilities">240.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
-                        <p class="text-xs text-slate-500">BSに滞留していたポイント引当金（負債）が即座に消滅。自己資本比率改善。</p>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-teal-500 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-teal-50 text-3xl"><i class="fa-solid fa-weight-scale"></i></div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">② BS 負債の即時圧縮</h4>
+                            <div class="font-poppins text-3xl font-bold text-teal-600 mb-1">▲<span id="outLiabilities">240.0</span> <span class="text-lg text-slate-600 font-normal">百万円</span></div>
+                            <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">BSに滞留していたポイント引当金（負債）が即座に消滅。自己資本比率改善。</p>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded border border-slate-200" id="formulaLiabilities">
+                            式: --
+                        </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-amber-500 relative overflow-hidden">
-                        <div class="absolute top-4 right-4 text-amber-50 text-4xl"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">③ 確実な損金容認 (税務メリット)</h4>
-                        <div class="font-poppins text-4xl font-bold text-amber-600 mb-2">+<span id="outTaxBenefit">84.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
-                        <p class="text-xs text-slate-500">損金否認されていた引当金が確定し、法人税還付・軽減効果が即時発生。</p>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-amber-500 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-amber-50 text-3xl"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">③ 確実な損金容認 (税務メリット)</h4>
+                            <div class="font-poppins text-3xl font-bold text-amber-600 mb-1">+<span id="outTaxBenefit">84.0</span> <span class="text-lg text-slate-600 font-normal">百万円</span></div>
+                            <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">損金否認されていた引当金が確定し、法人税還付・軽減効果が即時発生。</p>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded border border-slate-200" id="formulaTaxBenefit">
+                            式: --
+                        </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-indigo-500 relative overflow-hidden">
-                        <div class="absolute top-4 right-4 text-indigo-50 text-4xl"><i class="fa-solid fa-wallet"></i></div>
-                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">④ 実質キャッシュ負担額</h4>
-                        <div class="font-poppins text-4xl font-bold text-indigo-600 mb-2"><span id="outNetBurden">141.0</span> <span class="text-xl text-slate-600 font-normal">百万円</span></div>
-                        <p class="text-xs text-slate-500">実質支出額（<span id="txtCashOut">225</span>M）から税務メリットを差し引いた、究極的に抑えられた自己負担。</p>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-indigo-500 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-indigo-50 text-3xl"><i class="fa-solid fa-wallet"></i></div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">④ 実質キャッシュ負担額</h4>
+                            <div class="font-poppins text-3xl font-bold text-indigo-600 mb-1"><span id="outNetBurden">141.0</span> <span class="text-lg text-slate-600 font-normal">百万円</span></div>
+                            <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">実質支出額（<span id="txtCashOut">225</span>M）から税務メリットを差し引いた、究極的に抑えられた自己負担。</p>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded border border-slate-200" id="formulaNetBurden">
+                            式: --
+                        </div>
                     </div>
                 </div>
 
@@ -473,7 +495,13 @@
             txtCashOut: document.getElementById('txtCashOut'),
             txtTaxNote: document.getElementById('txtTaxNote'),
             txtTaxDiscount: document.getElementById('txtTaxDiscount'),
-            txtPartDiscount: document.getElementById('txtPartDiscount')
+            txtPartDiscount: document.getElementById('txtPartDiscount'),
+            
+            // 新規取得：数式エリアの要素
+            formulaPlProfit: document.getElementById('formulaPlProfit'),
+            formulaLiabilities: document.getElementById('formulaLiabilities'),
+            formulaTaxBenefit: document.getElementById('formulaTaxBenefit'),
+            formulaNetBurden: document.getElementById('formulaNetBurden')
         };
 
         const tbl = {
@@ -539,6 +567,20 @@
             displays.outNetBurden.innerText = formatNum(netBurden);
             displays.txtCashOut.innerText = formatNum(totalCashOut);
             displays.txtTaxNote.innerText = formatNum(taxBenefit);
+
+            // --- リアルタイム計算式の動的テキスト書き換え処理 ---
+            if (displays.formulaPlProfit) {
+                displays.formulaPlProfit.innerHTML = `式: 引当戻益 ${formatNum(liability)} - (購入費 ${formatNum(giftCost)} + 手数料 ${formatNum(commissionCost)}) = <span class="font-bold text-blue-900">+${formatNum(Math.max(0, plProfit))}百万円</span>`;
+            }
+            if (displays.formulaLiabilities) {
+                displays.formulaLiabilities.innerHTML = `式: 対象額 ${formatNum(state.targetPoints)} × 引当率 ${(state.provisionRate * 100).toFixed(0)}% = <span class="font-bold text-teal-600">▲${formatNum(liability)}百万円</span>`;
+            }
+            if (displays.formulaTaxBenefit) {
+                displays.formulaTaxBenefit.innerHTML = `式: 負債圧縮 ${formatNum(liability)} × 税率 ${(state.taxRate * 100).toFixed(1)}% = <span class="font-bold text-amber-600">+${formatNum(taxBenefit)}百万円</span>`;
+            }
+            if (displays.formulaNetBurden) {
+                displays.formulaNetBurden.innerHTML = `式: 実支出 ${formatNum(totalCashOut)} - 節税メリット ${formatNum(taxBenefit)} = <span class="font-bold text-indigo-600">${formatNum(netBurden)}百万円</span>`;
+            }
 
             const prefix = plProfit >= 0 ? "+" : "";
             tbl.plDelta.innerText = prefix + formatNum(plProfit);
@@ -616,7 +658,7 @@
                             borderRadius: 4
                         },
                         {
-                            label: '施策后',
+                            label: '施策後',
                             data: [0, 0, 0],
                             backgroundColor: 'rgba(30, 58, 138, 0.8)',
                             borderRadius: 4
